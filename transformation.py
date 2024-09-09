@@ -30,14 +30,18 @@ def draw_transformed_receipts(image, bounding_boxes):
     """Transform and display all detected receipts."""
     transformed_receipts = []
 
-    for bounding_box in bounding_boxes:
+    for i, bounding_box in enumerate(bounding_boxes):
         # Apply perspective transformation
         transformed_receipt = get_perspective_transform(image, bounding_box)
         transformed_receipts.append(transformed_receipt)
 
-        # Display each transformed receipt
-        cv2.imshow('Transformed Receipt', transformed_receipt)
-        cv2.waitKey(0)
+        # Display each transformed receipt in a unique window
+        window_name = f'Transformed Receipt {i+1}'
+        cv2.imshow(window_name, transformed_receipt)
+
+    # Wait for a key press to close all windows
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
     return transformed_receipts
 
