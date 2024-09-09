@@ -5,7 +5,7 @@ from edge_detection import (
     apply_adaptive_threshold,
     apply_morphology,
     find_receipt_contours,
-    remove_nested_rectangles
+    combine_overlapping_rectangles
 )
 
 
@@ -63,11 +63,11 @@ def main():
     # Step 3: Detect all contours that could be receipts, with a minimum height of 200 pixels
     bounding_boxes = find_receipt_contours(morphed_image, min_height=200)
 
-    # Step 4: Remove nested rectangles (now removes nested bounding boxes)
-    non_nested_boxes = remove_nested_rectangles(bounding_boxes)
+    # Step 4: Combine overlapping rectangles
+    combined_boxes = combine_overlapping_rectangles(bounding_boxes)
 
     # Step 5: Apply the perspective transformation to each detected receipt and display them
-    draw_transformed_receipts(image, non_nested_boxes)
+    draw_transformed_receipts(image, combined_boxes)
 
 
 if __name__ == "__main__":
