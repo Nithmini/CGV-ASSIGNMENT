@@ -75,7 +75,6 @@ def extract_total_or_subtotal(extracted_text):
         print(extracted_text)
         return 0.0
 
-
 def process_receipts(image_paths):
     """Process multiple receipts and extract the total or subtotal for each."""
     totals = []
