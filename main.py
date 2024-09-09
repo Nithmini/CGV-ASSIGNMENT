@@ -11,6 +11,7 @@ from edge_detection import (
     combine_overlapping_rectangles
 )
 from transformation import draw_transformed_receipts
+from ocr_functions import extract_text_from_receipts, save_all_texts_to_files
 
 def load_image(image_path):
     """Load the image from the specified path."""
@@ -58,6 +59,8 @@ def main(image_path, operations):
             image = operation_functions[operation](image)
         else:
             print(f"Warning: '{operation}' is not a valid operation")
+
+
 
     cv2.imshow('Processed Image', image)
     cv2.waitKey(0)
