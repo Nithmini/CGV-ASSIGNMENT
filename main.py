@@ -11,12 +11,14 @@ from edge_detection import (
     combine_overlapping_rectangles
 )
 from transformation import draw_transformed_receipts
-from ocr_functions import extract_text_from_receipts, save_all_texts_to_files
+from ocr_functions import extract_text_from_image
+
 
 def load_image(image_path):
     """Load the image from the specified path."""
     image = cv2.imread(image_path)
     return image
+
 
 def apply_edge_detection_and_transformation(image):
     """Apply edge detection and transformation to the image."""
@@ -37,6 +39,7 @@ def apply_edge_detection_and_transformation(image):
     transformed_receipts = draw_transformed_receipts(image, combined_boxes)
 
     return transformed_receipts[0]  # Return the first transformed receipt for further processing
+
 
 def main(image_path, operations):
     image = load_image(image_path)
@@ -60,14 +63,19 @@ def main(image_path, operations):
         else:
             print(f"Warning: '{operation}' is not a valid operation")
 
+    extracted_text = extract_text_from_image(image, lang='eng')
 
+    # Print the extracted text
+    print("Extracted Text from Image:")
+    print(extracted_text)
 
     cv2.imshow('Processed Image', image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+
 if __name__ == "__main__":
-    image_path = "images/Recept-II.png"
+    image_path = "images/Recept-I.png"
     # Define the order and selection of operations
     operations = ['grayscale', 'dilation', 'sharpening', 'binarization']
     main(image_path, operations)

@@ -22,7 +22,7 @@ def extract_text_from_receipts(transformed_receipts, lang='eng'):
 
 
 if __name__ == "__main__":
-    transformed_receipts = [cv2.imread("images/Recept-I.png")] 
+    transformed_receipts = [cv2.imread("images/Recept-I.png")]
 
     # Extract text from each receipt and print it to the terminal
     extract_text_from_receipts(transformed_receipts, lang='eng')
