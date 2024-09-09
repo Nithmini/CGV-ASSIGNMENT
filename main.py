@@ -1,4 +1,3 @@
-# main.py
 import cv2
 from grayscale import convert_to_grayscale
 from binarization import apply_binarization
@@ -12,18 +11,33 @@ def load_image(image_path):
     return image
 
 
-def main(image_path):
+def main(image_path, operations):
     image = load_image(image_path)
-    gray_image = convert_to_grayscale(image)
-    binary_image = apply_binarization(gray_image)
-    dilated_image = apply_dilation(binary_image)
-    eroded_image = apply_erosion(dilated_image)
-    sharpened_image = apply_sharpening(eroded_image)
-    cv2.imshow('Final Image', sharpened_image)
+
+    # Dictionary of available operations
+    operation_functions = {
+        'grayscale': convert_to_grayscale,
+        'binarization': apply_binarization,
+        'dilation': apply_dilation,
+        'erosion': apply_erosion,
+        'sharpening': apply_sharpening
+    }
+
+    # Execute specified operations in order
+    for operation in operations:
+        if operation in operation_functions:
+            image = operation_functions[operation](image)
+        else:
+            print(f"Warning: '{operation}' is not a valid operation")
+
+    cv2.imshow('Processed Image', image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    image_path = "images/Recept-I.png"
-    main(image_path)
+    image_path = "images/Recept-II.png"
+    # Define the order and selection of operations
+    # operations = ['grayscale', 'binarization', 'dilation', 'erosion', 'sharpening']
+    operations = ['grayscale', 'dilation','sharpening', 'binarization', ]
+    main(image_path, operations)
