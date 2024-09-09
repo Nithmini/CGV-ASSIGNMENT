@@ -10,16 +10,22 @@ def format_text(text):
     text = re.sub(r'\s*\|\s*', ' | ', text)
 
     # Insert line breaks before specific headings
-    text = re.sub(r'(RESTAURANT|Lorem Ipsum|City Index|Tel:|"TAX INVOICE|CASH RECEIPT)', r'\n\1', text)
-
-    # Insert line breaks after specific keywords to structure the receipt
-    text = re.sub(r'(CASH RECEIPT|Sub Total|Cash|Change|Total)', r'\n\1', text)
-
-    # Insert line breaks after each item with a price
-    text = re.sub(r'(\d+\.\d{2})', r'\1\n', text)
+    text = re.sub(r'(RESTAURANT|Lorem Ipsum|City Index|Tel:|TAX INVOICE|CASH RECEIPT|BAKERY|Sub Total)', r'\n\1', text)
 
     # Correct the "Name Qty Total" line
     text = re.sub(r'(Name\s+Qty\s+Total)', r'\n\1\n', text)
+
+    # Correct numbers that are missing decimal points, assuming 3 or 4 digits are cents
+    def correct_price(match):
+        number = match.group()
+        if len(number) == 3 or len(number) == 4:
+            return f"{int(number) / 100:.2f}"
+        return number
+
+    text = re.sub(r'\b\d{3,4}\b(?!\.\d{2})', correct_price, text)
+
+    # Insert line breaks after prices to ensure they are on their own line
+    text = re.sub(r'(\d+\.\d{2})', r'\1\n', text)
 
     # Split the text into lines for further formatting
     lines = text.splitlines()
@@ -43,24 +49,17 @@ def format_text(text):
             else:
                 formatted_lines.append(f"{item_part:<25}      {price_part:>7}")
         else:
-            # Handle lines where the price is missing or misaligned (e.g., CheeseBurger)
-            if re.match(r'.*\d+\s+\d+$', line):
-                parts = re.split(r'\s+', line)
-                name = ' '.join(parts[:-2]).strip()
-                qty = parts[-2].strip()
-                price = float(parts[-1].strip())
-                formatted_lines.append(f"{name:<25} {qty:>3}  {price:>7.2f}")
+            # Ensure "Sub Total" and other labels are properly formatted without extra spaces
+            if re.match(r'(RESTAURANT|CASH RECEIPT|Sub Total|Cash|Change|BAKERY)', line):
+                formatted_lines.append(f"\n{line}")
             else:
-                # Add line breaks before main labels and format other lines
-                if re.match(r'(RESTAURANT|CASH RECEIPT|Sub Total|Cash|Change)', line):
-                    formatted_lines.append(f"\n{line}")
-                else:
-                    formatted_lines.append(line)
+                # Format regular lines
+                formatted_lines.append(line)
 
-    # Add space before the item list and after the totals
+    # Combine formatted lines into the final text
     formatted_text = "\n".join(formatted_lines)
-    formatted_text = re.sub(r'(CASH RECEIPT\n)', r'\1\n', formatted_text)  # Space after CASH RECEIPT
-    formatted_text = re.sub(r'(Change\s+\d+\.\d{2})', r'\1\n\n', formatted_text)  # Space after Change
+    formatted_text = re.sub(r'(Sub Total)', r'\n\1', formatted_text)  # Add space before "Sub Total"
+    formatted_text = re.sub(r'(Change\s+\d+\.\d{2})', r'\1\n\n', formatted_text)  # Space after "Change"
 
     return formatted_text
 
