@@ -1,21 +1,14 @@
 import cv2
 import numpy as np
 
-# Load the Binarized Image
-image_path = 'images/Recept-II.png'
-binary_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
-# Create a kernel for morphological operations
-kernel = np.ones((3, 3), np.uint8)
+def apply_dilation(image, kernel_size=(3, 3), iterations=1):
+    """Apply dilation to the image."""
+    kernel = np.ones(kernel_size, np.uint8)
+    return cv2.dilate(image, kernel, iterations=iterations)
 
-# Perform Dilation (to enhance text)
-dilated_image = cv2.dilate(binary_image, kernel, iterations=1)
 
-# Perform Erosion (to remove noise)
-eroded_image = cv2.erode(dilated_image, kernel, iterations=1)
-
-# Show the Morphological Operations Result
-cv2.imshow('Dilated Image', dilated_image)
-cv2.imshow('Eroded Image', eroded_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+def apply_erosion(image, kernel_size=(3, 3), iterations=1):
+    """Apply erosion to the image."""
+    kernel = np.ones(kernel_size, np.uint8)
+    return cv2.erode(image, kernel, iterations=iterations)
