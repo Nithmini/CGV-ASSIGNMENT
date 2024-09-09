@@ -36,12 +36,12 @@ def draw_transformed_receipts(image, bounding_boxes):
         transformed_receipts.append(transformed_receipt)
 
         # Display each transformed receipt in a unique window
-        window_name = f'Transformed Receipt {i+1}'
-        cv2.imshow(window_name, transformed_receipt)
+        # window_name = f'Transformed Receipt {i+1}'
+        # cv2.imshow(window_name, transformed_receipt)
 
     # Wait for a key press to close all windows
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     return transformed_receipts
 
