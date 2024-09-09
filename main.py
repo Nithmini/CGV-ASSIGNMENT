@@ -48,7 +48,7 @@ def get_operations_for_image(image_path):
     operations_by_image = {
         "images/Recept-I.png": ['grayscale', 'dilation', 'sharpening', 'erosion'],
         "images/Recept-II.png": ['grayscale', 'sharpening', 'binarization', ],
-        "images/Recept-III.png": ['grayscale', 'sharpening', 'binarization', ],
+        "images/Recept-III.png": ['grayscale', 'sharpening' ],
         "images/Recept-IV.png": ['grayscale', 'sharpening', ],
         "images/Recepts.png": ['grayscale', 'sharpening', 'binarization'],
     }
@@ -99,5 +99,5 @@ def main(image_path):
 
 
 if __name__ == "__main__":
-    image_path = "images/Recept-I.png"
+    image_path = "images/Recept-III.png"
     main(image_path)
